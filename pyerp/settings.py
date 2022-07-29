@@ -11,16 +11,25 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import logging
+import sys, os
+
+_logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s -%(filename)s:%(lineno)d - %(message)s')
+logging.debug(' = PYERP =')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+sys.path.append(os.path.join(BASE_DIR, "apps"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xqm9i6+k&w9$-96s-1@=_h$a-)z@$1mu3(onpcbd2@@ii+%3v4'
+SECRET_KEY = config("SECRET_KEY", default='')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.base',
+    'apps.users'
 ]
 
 MIDDLEWARE = [
@@ -75,8 +86,12 @@ WSGI_APPLICATION = 'pyerp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'db_pyerp',
+        'HOST': 'localhost',
+        'USER': 'odoo',
+        'PASSWORD': 'x1234567890',
+        'PORT': 5432
     }
 }
 
